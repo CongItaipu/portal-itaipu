@@ -84,10 +84,10 @@
                     <h3 class="text-base font-bold text-slate-800 mb-1">Navegação</h3>
                     <p class="text-xs text-slate-400 mb-6">Acesse os diretórios autorizados.</p>
                     
-                    <button onclick="listFiles('14lxas99C4s-H49VWOOUevgQqHZ6Zp1Cm')" class="w-full bg-blue-50 hover:bg-blue-100 text-blue-700 font-medium py-2.5 px-4 rounded-xl flex items-center gap-3 transition text-sm">
-                        <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
-                        Início da Pasta
-                    </button>
+                    <a href="https://drive.google.com/drive/folders/14lxas99C4s-H49VWOOUevgQqHZ6Zp1Cm" target="_blank" class="w-full bg-blue-50 hover:bg-blue-100 text-blue-700 font-medium py-2.5 px-4 rounded-xl flex items-center gap-3 transition text-sm justify-center">
+                        <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                        Abrir no Google Drive
+                    </a>
                 </div>
                 
                 <div class="p-4 border-t border-slate-100 text-xs text-center text-slate-400">
@@ -95,17 +95,12 @@
                 </div>
             </div>
 
-            <!-- ÁREA PRINCIPAL DE CONTEÚDO -->
-            <div class="flex-1 flex flex-col bg-slate-50 overflow-y-auto">
+            <!-- ÁREA PRINCIPAL DE CONTEÚDO (Google Drive incorporado) -->
+            <div class="flex-1 flex flex-col bg-slate-50 overflow-hidden">
                 
                 <!-- Cabeçalho Principal -->
-                <header class="bg-white px-6 py-4 border-b border-slate-200 flex justify-between items-center sticky top-0 z-10 shadow-sm">
-                    <div class="flex items-center gap-4">
-                        <h1 id="folder-title" class="text-lg font-bold text-slate-800">Arquivos e Pastas</h1>
-                        <button id="drive-auth-btn" onclick="handleDriveAuth()" class="hidden text-xs bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-3 py-1.5 rounded-lg transition shadow-sm">
-                            Conectar Google Drive
-                        </button>
-                    </div>
+                <header class="bg-white px-6 py-4 border-b border-slate-200 flex justify-between items-center z-10 shadow-sm">
+                    <h1 class="text-lg font-bold text-slate-800">Arquivos e Pastas da Congregação</h1>
                     
                     <button id="logout-btn" class="text-xs font-semibold text-rose-600 hover:text-white border border-rose-200 hover:bg-rose-600 px-3.5 py-2 rounded-xl transition duration-150 flex items-center gap-2">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
@@ -113,24 +108,19 @@
                     </button>
                 </header>
 
-                <!-- Grade de Arquivos (Conteúdo) -->
-                <div class="p-6 md:p-8">
-                    <div class="flex justify-between items-center mb-6">
-                        <p class="text-slate-500 text-sm">Selecione uma pasta para navegar ou clique em um documento para abrir.</p>
-                    </div>
-                    
-                    <div id="file-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                        <!-- Conteúdo carregado via script -->
+                <!-- Corpo com a Pasta do Drive incorporada por link -->
+                <div class="flex-1 p-4 md:p-6 overflow-hidden">
+                    <div class="w-full h-full bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+                        <iframe src="https://drive.google.com/embeddedfolderview?id=14lxas99C4s-H49VWOOUevgQqHZ6Zp1Cm#list" 
+                                class="w-full h-full border-0" 
+                                title="Pasta do Google Drive">
+                        </iframe>
                     </div>
                 </div>
 
             </div>
         </div>
     </div>
-
-    <!-- Bibliotecas Oficiais do Google -->
-    <script async defer src="https://apis.google.com/js/api.js" onload="gapiLoaded()"></script>
-    <script async defer src="https://accounts.google.com/gsi/client" onload="gisLoaded()"></script>
 
     <!-- Firebase e Autenticação -->
     <script type="module">
@@ -193,106 +183,6 @@
         });
 
         logoutBtn.addEventListener('click', () => signOut(auth));
-    </script>
-
-    <!-- Integração Google Drive (Versão Estável) -->
-    <script>
-        const CLIENT_ID = '738543102151-eb59ak55kbcd3pk6l2vos001jjht0d28.apps.googleusercontent.com';
-        const API_KEY = 'AIzaSyCp_XA2IXj4k_NVD_GP0pN6rshMxYDNxOs';
-        const DISCOVERY_DOC = 'https://www.googleapis.com/discovery/v1/apis/drive/v3/rest';
-        const SCOPES = 'https://www.googleapis.com/auth/drive.readonly';
-
-        let tokenClient;
-        let gapiInited = false;
-        let gisInited = false;
-
-        function gapiLoaded() {
-            gapi.load('client', initializeGapiClient);
-        }
-
-        async function initializeGapiClient() {
-            await gapi.client.init({
-                apiKey: API_KEY,
-                discoveryDocs: [DISCOVERY_DOC],
-            });
-            gapiInited = true;
-        }
-
-        function gisLoaded() {
-            tokenClient = google.accounts.oauth2.initTokenClient({
-                client_id: CLIENT_ID,
-                scope: SCOPES,
-                callback: (resp) => {
-                    if (resp.error) {
-                        console.error(resp);
-                        return;
-                    }
-                    document.getElementById('drive-auth-btn').classList.add('hidden');
-                    listFiles('14lxas99C4s-H49VWOOUevgQqHZ6Zp1Cm');
-                }
-            });
-            gisInited = true;
-        }
-
-        function handleDriveAuth() {
-            tokenClient.requestAccessToken({ prompt: 'consent' });
-        }
-
-        async function listFiles(folderId = '14lxas99C4s-H49VWOOUevgQqHZ6Zp1Cm') {
-            const grid = document.getElementById('file-grid');
-            grid.innerHTML = '<p class="text-slate-400 text-sm col-span-full py-8 text-center">A carregar conteúdos do Google Drive...</p>';
-
-            if (!gapi.client.getToken()) {
-                document.getElementById('drive-auth-btn').classList.remove('hidden');
-                grid.innerHTML = '<div class="col-span-full bg-amber-50 border border-amber-200 p-6 rounded-2xl text-center"><p class="text-amber-800 font-medium text-sm mb-3">É necessário autorizar a ligação ao Google Drive para visualizar os ficheiros.</p><button onclick="handleDriveAuth()" class="bg-amber-600 hover:bg-amber-700 text-white font-semibold text-xs px-4 py-2.5 rounded-xl transition shadow-sm">Conectar Agora</button></div>';
-                return;
-            }
-
-            try {
-                const response = await gapi.client.drive.files.list({
-                    q: `'${folderId}' in parents and trashed = false`,
-                    fields: 'files(id, name, mimeType, webViewLink)',
-                    orderBy: 'folder, name'
-                });
-
-                const files = response.result.files;
-                grid.innerHTML = '';
-
-                if (!files || files.length === 0) {
-                    grid.innerHTML = '<p class="text-slate-400 text-sm col-span-full py-8 text-center">Esta pasta encontra-se vazia.</p>';
-                    return;
-                }
-
-                const folderIcon = `<div class="p-3 bg-blue-50 rounded-xl text-blue-600 mb-3 group-hover:scale-110 transition-transform"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path></svg></div>`;
-                const fileIcon = `<div class="p-3 bg-slate-100 rounded-xl text-slate-500 mb-3 group-hover:scale-110 transition-transform"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg></div>`;
-
-                files.forEach(file => {
-                    const isFolder = file.mimeType === 'application/vnd.google-apps.folder';
-                    const icon = isFolder ? folderIcon : fileIcon;
-                    
-                    const card = document.createElement('div');
-                    card.className = `group bg-white p-5 rounded-2xl border border-slate-200/80 cursor-pointer transition-all duration-200 hover:shadow-lg hover:border-blue-300 flex flex-col items-center justify-center text-center`;
-                    
-                    if (isFolder) {
-                        card.onclick = () => listFiles(file.id);
-                    } else {
-                        card.onclick = () => window.open(file.webViewLink, '_blank');
-                    }
-
-                    card.innerHTML = `
-                        ${icon}
-                        <span class="text-xs font-medium text-slate-700 line-clamp-2 leading-relaxed">${file.name}</span>
-                    `;
-                    
-                    grid.appendChild(card);
-                });
-
-            } catch (err) {
-                console.error(err);
-                grid.innerHTML = '<p class="text-rose-500 text-sm col-span-full py-8 text-center font-medium">Ocorreu um erro ao carregar os itens. Tente reconectar o Google Drive.</p>';
-                document.getElementById('drive-auth-btn').classList.remove('hidden');
-            }
-        }
     </script>
 </body>
 </html>
