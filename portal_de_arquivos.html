@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal de Arquivos - Congregação Itaipu</title>
+    <!-- Tailwind CSS para Estilização -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Estilos adicionais personalizados */
+        body { font-family: 'Inter', 'Segoe UI', sans-serif; }
+        
+        /* Banner customizado */
+        #banner {
+            background-color: #1e3a5f; /* Cor de fundo caso a imagem não carregue */
+            /* COLE O LINK DA SUA IMAGEM ABAIXO DENTRO DE URL('') */
+            background-image: url('Gemini_Generated_Image_p7kryzp7kryzp7kr.jpg'); 
+            background-size: cover;
+            background-position: center;
+        }
+
+        /* Animação suave para exibir as telas */
+        .fade-in { animation: fadeIn 0.4s ease-in-out; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800 h-screen overflow-hidden flex flex-col">
+
+    <!-- ========================================== -->
+    <!-- TELA DE LOGIN (Visível se NÃO estiver logado)-->
+    <!-- ========================================== -->
+    <div id="login-view" class="flex-1 flex items-center justify-center bg-gray-50 z-50 absolute inset-0">
+        <div class="bg-white p-8 rounded-xl shadow-xl w-full max-w-md fade-in border border-gray-200">
+            <div class="text-center mb-8">
+                <h2 class="text-2xl font-bold text-gray-800">Acesso Restrito</h2>
+                <p class="text-sm text-gray-500 mt-2">Congregação Itaipu - Portal de Arquivos</p>
+            </div>
+
+            <form id="login-form" class="space-y-5">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">E-mail</label>
+                    <input type="email" id="email" required 
+                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition" 
+                           placeholder="usuario@email.com">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Senha</label>
+                    <input type="password" id="password" required 
+                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition" 
+                           placeholder="••••••••">
+                </div>
+                
+                <!-- Mensagem de Erro -->
+                <div id="error-msg" class="hidden bg-red-50 text-red-600 text-sm p-3 rounded-lg border border-red-100">
+                    E-mail ou senha incorretos.
+                </div>
+
+                <button type="submit" id="login-btn" 
+                        class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2.5 rounded-lg transition duration-200 flex justify-center items-center">
+                    <span>Entrar no Portal</span>
+                </button>
+            </form>
+            
+            <div class="mt-6 text-center text-xs text-gray-400">
+                Apenas usuários autorizados podem acessar este sistema.<br>
+                Contate o administrador para obter suas credenciais.
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- PAINEL PRINCIPAL (Visível se ESTIVER logado)-->
+    <!-- ========================================== -->
+    <div id="dashboard-view" class="hidden flex-col h-screen w-full fade-in relative">
+        
+        <!-- BANNER DO TOPO -->
+        <div id="banner" class="w-full h-32 md:h-48 shadow-md relative z-10 flex items-center justify-center">
+            <!-- Texto provisório caso a imagem demore a carregar. Se a imagem do JW carregar bem, pode remover isso -->
+            <span class="text-white text-opacity-30 absolute font-bold text-xl drop-shadow-md">Congregação Itaipu</span>
+        </div>
+
+        <div class="flex flex-1 overflow-hidden relative">
+            
+            <!-- BARRA LATERAL (Sidebar) -->
+            <div class="w-64 bg-white border-r border-gray-200 hidden md:flex flex-col justify-between z-20 shadow-sm">
+                <div class="p-5">
+                    <h3 class="text-lg font-bold text-gray-800 mb-1">Meu Portal</h3>
+                    <p class="text-xs text-gray-500 mb-6">Acesso aos arquivos e diretórios autorizados.</p>
+                    
+                    <button class="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-2 px-4 rounded-lg flex items-center gap-2 transition">
+                        <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+                        Página Inicial
+                    </button>
+                </div>
+                
+                <div class="p-4 border-t border-gray-100 text-xs text-center text-gray-400">
+                    Sistema Restrito &copy; 2024
+                </div>
+            </div>
+
+            <!-- ÁREA PRINCIPAL DE CONTEÚDO -->
+            <div class="flex-1 flex flex-col bg-gray-50 overflow-y-auto">
+                
+                <!-- Cabeçalho Principal -->
+                <header class="bg-white px-6 py-4 border-b border-gray-200 flex justify-between items-center sticky top-0 z-10 shadow-sm">
+                    <h1 class="text-xl font-bold text-gray-800">Arquivos e Pastas</h1>
+                    
+                    <button id="logout-btn" class="text-sm font-medium text-red-600 hover:text-white border border-red-600 hover:bg-red-600 px-4 py-1.5 rounded-md transition duration-150 flex items-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+                        Sair
+                    </button>
+                </header>
+
+                <!-- Grade de Arquivos (Conteúdo) -->
+                <div class="p-6">
+                    <p class="text-gray-500 mb-6 text-sm">Selecione um item abaixo para visualizar.</p>
+                    
+                    <div id="file-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+                        <!-- O conteúdo será gerado via JavaScript -->
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- SCRIPTS E LÓGICA DO FIREBASE               -->
+    <!-- ========================================== -->
+    <script type="module">
+        // Importando as funções do Firebase Web SDK versão modular
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+
+        // =========================================================================
+        // ATENÇÃO: SUBSTITUA O CÓDIGO ABAIXO PELAS CREDENCIAIS DO SEU FIREBASE
+        // =========================================================================
+        const firebaseConfig = {
+        apiKey: "AIzaSyAJxyFXok-hdDAfFnHm1wGEeweG3lBwB2g",
+        authDomain: "cong-itaipu.firebaseapp.com",
+        projectId: "cong-itaipu",
+        storageBucket: "cong-itaipu.firebasestorage.app",
+        messagingSenderId: "738543102151",
+        appId: "1:738543102151:web:8c5873b831081b582f36e2",
+        measurementId: "G-Y24Z52DWFF"
+        };
+        // =========================================================================
+
+        // Tratamento para ambiente local de testes do chat (Ignorar se for rodar na sua máquina)
+        let configToUse = firebaseConfig;
+        if (typeof __firebase_config !== 'undefined') {
+            configToUse = JSON.parse(__firebase_config);
+        }
+
+        // Inicializa o Firebase
+        const app = initializeApp(configToUse);
+        const auth = getAuth(app);
+
+        // Referências aos elementos da tela
+        const loginView = document.getElementById('login-view');
+        const dashboardView = document.getElementById('dashboard-view');
+        const loginForm = document.getElementById('login-form');
+        const errorMsg = document.getElementById('error-msg');
+        const logoutBtn = document.getElementById('logout-btn');
+        const loginBtn = document.getElementById('login-btn');
+        const fileGrid = document.getElementById('file-grid');
+
+        // Lógica de Autenticação - Observador de estado de Login
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                // Usuário está logado, esconde login e mostra painel
+                loginView.classList.add('hidden');
+                dashboardView.classList.remove('hidden');
+                dashboardView.classList.add('flex');
+                
+                // Renderiza as pastas simuladas
+                renderMockFiles();
+            } else {
+                // Usuário não está logado, mostra login
+                dashboardView.classList.add('hidden');
+                dashboardView.classList.remove('flex');
+                loginView.classList.remove('hidden');
+            }
+        });
+
+        // Evento de envio do formulário de Login
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            // UI Update: loading state
+            const originalBtnText = loginBtn.innerHTML;
+            loginBtn.innerHTML = "Autenticando...";
+            loginBtn.disabled = true;
+            errorMsg.classList.add('hidden');
+
+            signInWithEmailAndPassword(auth, email, password)
+                .then((userCredential) => {
+                    // Sucesso no login - O observador onAuthStateChanged cuidará da transição
+                    loginForm.reset();
+                    loginBtn.innerHTML = originalBtnText;
+                    loginBtn.disabled = false;
+                })
+                .catch((error) => {
+                    // Erro no login (senha fraca, usuario invalido, etc)
+                    console.error("Erro de login:", error.code, error.message);
+                    errorMsg.classList.remove('hidden');
+                    if(error.code === 'auth/invalid-credential' || error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
+                        errorMsg.textContent = "E-mail ou senha incorretos. Tente novamente.";
+                    } else if(error.code === 'auth/invalid-api-key') {
+                        errorMsg.textContent = "Erro de configuração. Verifique as chaves do Firebase.";
+                    } else {
+                        errorMsg.textContent = "Erro ao fazer login. Tente novamente.";
+                    }
+                    loginBtn.innerHTML = originalBtnText;
+                    loginBtn.disabled = false;
+                });
+        });
+
+        // Evento de Logout (Sair)
+        logoutBtn.addEventListener('click', () => {
+            signOut(auth).then(() => {
+                console.log("Deslogado com sucesso");
+            }).catch((error) => {
+                console.error("Erro ao deslogar:", error);
+            });
+        });
+
+        // ==========================================
+        // DADOS SIMULADOS DAS PASTAS E ARQUIVOS
+        // ==========================================
+        function renderMockFiles() {
+            // Limpa o grid
+            fileGrid.innerHTML = '';
+
+            // Lista simulada
+            const data = [
+                { name: "Atas de Reuniões 2024", type: "folder" },
+                { name: "Relatórios de Serviço", type: "folder" },
+                { name: "Programações do Mês", type: "folder" },
+                { name: "Cartas Anúncios", type: "folder" },
+                { name: "Territórios", type: "folder" },
+                { name: "Instruções DIVERSAS.pdf", type: "file" },
+                { name: "Escala_Limpeza.xlsx", type: "file" }
+            ];
+
+            // Icone de Pasta (SVG)
+            const folderIcon = `<svg class="w-10 h-10 text-blue-500 mb-3" fill="currentColor" viewBox="0 0 20 20"><path d="M2 6a2 2 0 012-2h5l2 2h5a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V6z"></path></svg>`;
+            
+            // Icone de Arquivo (SVG)
+            const fileIcon = `<svg class="w-10 h-10 text-gray-500 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>`;
+
+            data.forEach(item => {
+                const isFolder = item.type === 'folder';
+                const icon = isFolder ? folderIcon : fileIcon;
+                const bgColor = isFolder ? 'bg-blue-50 hover:bg-blue-100 border-blue-200' : 'bg-white hover:bg-gray-50 border-gray-200';
+                
+                const card = document.createElement('div');
+                card.className = `p-5 rounded-xl border cursor-pointer transition-all duration-200 hover:shadow-md flex flex-col items-center justify-center text-center ${bgColor}`;
+                
+                // Interação simulada ao clicar
+                card.onclick = () => {
+                    alert(`Você clicou em: ${item.name}\n(Aqui você conectaria com o Google Drive futuramente)`);
+                };
+
+                card.innerHTML = `
+                    ${icon}
+                    <span class="text-sm font-semibold ${isFolder ? 'text-blue-900' : 'text-gray-700'} line-clamp-2">${item.name}</span>
+                `;
+                
+                fileGrid.appendChild(card);
+            });
+        }
+    </script>
+</body>
+</html>
