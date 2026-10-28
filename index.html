@@ -9,7 +9,6 @@
     <style>
         body { font-family: 'Inter', 'Segoe UI', sans-serif; }
         
-        /* Banner customizado */
         #banner {
             background-color: #0c1e36;
             background-image: url('Gemini_Generated_Image_p7kryzp7kryzp7kr.jpg'); 
@@ -75,10 +74,7 @@
     <div id="dashboard-view" class="hidden flex-col h-screen w-full fade-in relative">
         
         <!-- BANNER DO TOPO -->
-        <div id="banner" class="w-full h-32 md:h-44 shadow-md relative z-10 flex items-center justify-center">
-            <!-- Caso queira um texto sobreposto elegante no banner, descomente abaixo -->
-            <!-- <span class="text-white font-bold text-2xl drop-shadow-md tracking-wider">CONGREGAÇÃO ITAIPU</span> -->
-        </div>
+        <div id="banner" class="w-full h-32 md:h-44 shadow-md relative z-10 flex items-center justify-center"></div>
 
         <div class="flex flex-1 overflow-hidden relative">
             
@@ -103,7 +99,7 @@
             <div class="flex-1 flex flex-col bg-slate-50 overflow-y-auto">
                 
                 <!-- Cabeçalho Principal -->
-                <header class="bg-white px-6 py-4 border-b border-slate-200 flex justify-between items-center sticky top-0 z-10 shadow-xs">
+                <header class="bg-white px-6 py-4 border-b border-slate-200 flex justify-between items-center sticky top-0 z-10 shadow-sm">
                     <div class="flex items-center gap-4">
                         <h1 id="folder-title" class="text-lg font-bold text-slate-800">Arquivos e Pastas</h1>
                         <button id="drive-auth-btn" onclick="handleDriveAuth()" class="hidden text-xs bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-3 py-1.5 rounded-lg transition shadow-sm">
@@ -136,7 +132,7 @@
     <script async defer src="https://apis.google.com/js/api.js" onload="gapiLoaded()"></script>
     <script async defer src="https://accounts.google.com/gsi/client" onload="gisLoaded()"></script>
 
-    <!-- Firebase e Google Drive Script -->
+    <!-- Firebase e Autenticação -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
@@ -166,7 +162,6 @@
                 loginView.classList.add('hidden');
                 dashboardView.classList.remove('hidden');
                 dashboardView.classList.add('flex');
-                listFiles('14lxas99C4s-H49VWOOUevgQqHZ6Zp1Cm');
             } else {
                 dashboardView.classList.add('hidden');
                 dashboardView.classList.remove('flex');
@@ -200,7 +195,7 @@
         logoutBtn.addEventListener('click', () => signOut(auth));
     </script>
 
-    <!-- Integração Google Drive -->
+    <!-- Integração Google Drive (Versão Estável) -->
     <script>
         const CLIENT_ID = '738543102151-eb59ak55kbcd3pk6l2vos001jjht0d28.apps.googleusercontent.com';
         const API_KEY = 'AIzaSyCp_XA2IXj4k_NVD_GP0pN6rshMxYDNxOs';
@@ -228,7 +223,10 @@
                 client_id: CLIENT_ID,
                 scope: SCOPES,
                 callback: (resp) => {
-                    if (resp.error) return;
+                    if (resp.error) {
+                        console.error(resp);
+                        return;
+                    }
                     document.getElementById('drive-auth-btn').classList.add('hidden');
                     listFiles('14lxas99C4s-H49VWOOUevgQqHZ6Zp1Cm');
                 }
@@ -265,7 +263,6 @@
                     return;
                 }
 
-                // Ícones SVG customizados e elegantes
                 const folderIcon = `<div class="p-3 bg-blue-50 rounded-xl text-blue-600 mb-3 group-hover:scale-110 transition-transform"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path></svg></div>`;
                 const fileIcon = `<div class="p-3 bg-slate-100 rounded-xl text-slate-500 mb-3 group-hover:scale-110 transition-transform"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg></div>`;
 
