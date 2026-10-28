@@ -88,7 +88,7 @@
                     <h3 class="text-lg font-bold text-gray-800 mb-1">Meu Portal</h3>
                     <p class="text-xs text-gray-500 mb-6">Acesso aos arquivos e diretórios autorizados.</p>
                     
-                    <button onclick="listFiles('root')" class="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-2 px-4 rounded-lg flex items-center gap-2 transition">
+                    <button onclick="listFiles('14lxas99C4s-H49VWOOUevgQqHZ6Zp1Cm')" class="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-2 px-4 rounded-lg flex items-center gap-2 transition">
                         <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
                         Página Inicial
                     </button>
@@ -167,6 +167,8 @@
                 loginView.classList.add('hidden');
                 dashboardView.classList.remove('hidden');
                 dashboardView.classList.add('flex');
+                // Assim que logar, carrega a pasta principal configurada
+                listFiles('14lxas99C4s-H49VWOOUevgQqHZ6Zp1Cm');
             } else {
                 dashboardView.classList.add('hidden');
                 dashboardView.classList.remove('flex');
@@ -237,7 +239,7 @@
                         return;
                     }
                     document.getElementById('drive-auth-btn').classList.add('hidden');
-                    listFiles('root');
+                    listFiles('14lxas99C4s-H49VWOOUevgQqHZ6Zp1Cm');
                 }
             });
             gisInited = true;
@@ -247,7 +249,7 @@
             tokenClient.requestAccessToken({ prompt: 'consent' });
         }
 
-        async function listFiles(folderId = 'root') {
+        async function listFiles(folderId = '14lxas99C4s-H49VWOOUevgQqHZ6Zp1Cm') {
             const grid = document.getElementById('file-grid');
             grid.innerHTML = '<p class="text-gray-500 text-sm col-span-full">Carregando arquivos do Google Drive...</p>';
 
